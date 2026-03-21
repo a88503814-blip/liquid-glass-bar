@@ -1,0 +1,36 @@
+'use strict';
+const { contextBridge, ipcRenderer } = require('electron');
+
+contextBridge.exposeInMainWorld('electronAPI', {
+  onSystemStats:     cb => ipcRenderer.on('system-stats',            (_, d) => cb(d)),
+  onBatteryInfo:     cb => ipcRenderer.on('battery-info',            (_, d) => cb(d)),
+  onNetworkInfo:     cb => ipcRenderer.on('network-info',            (_, d) => cb(d)),
+  onMediaInfo:       cb => ipcRenderer.on('media-info',              (_, d) => cb(d)),
+  onWeatherInfo:     cb => ipcRenderer.on('weather-info',            (_, d) => cb(d)),
+  onNotification:    cb => ipcRenderer.on('new-notification',        (_, d) => cb(d)),
+  onWorkspaceInfo:   cb => ipcRenderer.on('workspace-info',          (_, d) => cb(d)),
+  onConfigUpdated:   cb => ipcRenderer.on('config-updated',          (_, d) => cb(d)),
+  onVolumeUpdate:    cb => ipcRenderer.on('volume-update',           (_, d) => cb(d)),
+  onOpenSettings:    cb => ipcRenderer.on('open-settings-from-tray', ()     => cb()),
+  onUpdateAvailable: cb => ipcRenderer.on('update-available',        (_, d) => cb(d)),
+  onUpdateProgress:  cb => ipcRenderer.on('update-progress',         (_, d) => cb(d)),
+  onUpdateReady:     cb => ipcRenderer.on('update-ready',            (_, d) => cb(d)),
+  onUpdateError:     cb => ipcRenderer.on('update-error',            (_, d) => cb(d)),
+
+  getVolume:       ()     => ipcRenderer.invoke('get-volume'),
+  setVolume:       v      => ipcRenderer.invoke('set-volume', v),
+  mediaControl:    action => ipcRenderer.invoke('media-control', action),
+  showMediaPanel:  x      => ipcRenderer.invoke('show-media-panel', x),
+  hideNotifPanel:  ()     => ipcRenderer.invoke('hide-notif-panel'),
+  updateDownload:  ()     => ipcRenderer.invoke('update-download'),
+  updateInstall:   ()     => ipcRenderer.invoke('update-install'),
+  updateCheck:     ()     => ipcRenderer.invoke('update-check'),
+  switchWorkspace: idx    => ipcRenderer.invoke('switch-workspace', idx),
+  getConfig:       ()     => ipcRenderer.invoke('get-config'),
+  saveConfig:      patch  => ipcRenderer.invoke('save-config', patch),
+  openSettings:    ()     => ipcRenderer.invoke('open-settings'),
+  closeSettings:   ()     => ipcRenderer.invoke('close-settings'),
+  reloadBar:       ()     => ipcRenderer.invoke('reload-bar'),
+  openConfigFile:  ()     => ipcRenderer.invoke('open-config-file'),
+  removeAllListeners: ch  => ipcRenderer.removeAllListeners(ch),
+});

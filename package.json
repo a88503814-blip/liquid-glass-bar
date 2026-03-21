@@ -1,0 +1,73 @@
+{
+  "name": "liquid-glass-bar",
+  "version": "1.0.0",
+  "description": "Ultra-modern Liquid Glass Status Bar for Windows",
+  "author": {
+    "name": "Naeto Ifeanyi",
+    "email": "naeto@liquidglassbar.app"
+  },
+  "main": "main.js",
+  "scripts": {
+    "start":     "electron .",
+    "dev":       "electron . --enable-logging",
+    "build:win": "electron-builder --win --x64",
+    "build:dir": "electron-builder --win --dir",
+    "release":   "electron-builder --win --x64 --publish always"
+  },
+  "dependencies": {
+    "systeminformation": "5.22.0",
+    "koffi":             "2.9.0"
+  },
+  "devDependencies": {
+    "electron":          "28.3.3",
+    "electron-builder":  "^25.1.8",
+    "electron-updater":  "^6.3.9"
+  },
+  "build": {
+    "appId":       "com.liquidglassbar.app",
+    "productName": "Liquid Glass Bar",
+    "copyright":   "Copyright © 2025 Naeto Ifeanyi",
+    "asar":        true,
+
+    "files": [
+      "main.js",
+      "preload.js",
+      "config.json",
+      "assets/**",
+      "modules/**",
+      "renderer/**",
+      "node_modules/**"
+    ],
+
+    "win": {
+      "target": [
+        { "target": "nsis",     "arch": ["x64"] },
+        { "target": "portable", "arch": ["x64"] }
+      ],
+      "icon": "assets/icon.ico"
+    },
+
+    "nsis": {
+      "oneClick":                          false,
+      "allowToChangeInstallationDirectory": true,
+      "installerIcon":                     "assets/icon.ico",
+      "uninstallerIcon":                   "assets/icon.ico",
+      "shortcutName":                      "Liquid Glass Bar",
+      "runAfterFinish":                    true,
+      "createDesktopShortcut":             true,
+      "createStartMenuShortcut":           true,
+      "include":                           "installer.nsh"
+    },
+
+    "portable": {
+      "artifactName": "LiquidGlassBar-portable.exe"
+    },
+
+    "publish": {
+      "provider": "github",
+      "owner":    "YOUR_GITHUB_USERNAME",
+      "repo":     "liquid-glass-bar",
+      "releaseType": "release"
+    }
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "_comment": "Edit this file to customise your Liquid Glass Bar. Restart with npm start to apply changes, or use the tray icon → Reload Bar.",
+
+  "bar": {
+    "height":       44,
+    "opacity":      0.92,
+    "accentColor":  "#60c8ff",
+    "cornerRadius": 0
+  },
+
+  "weather": {
+    "location":     "auto",
+    "unit":         "C"
+  },
+
+  "pomodoro": {
+    "focusMinutes": 25,
+    "breakMinutes": 5
+  },
+
+  "network": {
+    "pingTarget":   "8.8.8.8"
+  },
+
+  "notifications": {
+    "enabled":        true,
+    "dismissAfterMs": 5000
+  },
+
+  "widgets": {
+    "workspaces": true,
+    "media":      true,
+    "weather":    true,
+    "pomodoro":   true,
+    "network":    true,
+    "system":     true,
+    "uptime":     true,
+    "battery":    true
+  }
+}

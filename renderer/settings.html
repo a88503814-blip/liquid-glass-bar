@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self'">
+  <title>Bar Settings</title>
+  <link rel="stylesheet" href="settings.css">
+</head>
+<body>
+
+<div id="svg-sprite" aria-hidden="true"></div>
+
+<div id="panel">
+
+  <!-- Title bar -->
+  <div id="panel-titlebar">
+    <svg class="icon title-icon"><use href="#ic-layers"/></svg>
+    <span class="title-text">Liquid Glass Settings</span>
+    <button class="close-btn" id="close-btn" title="Close">
+      <svg class="icon"><use href="#ic-x"/></svg>
+    </button>
+  </div>
+
+  <!-- Tabs -->
+  <div id="tabs">
+    <button class="tab active" data-tab="appearance">Appearance</button>
+    <button class="tab" data-tab="widgets">Widgets</button>
+    <button class="tab" data-tab="weather">Weather</button>
+    <button class="tab" data-tab="pomodoro">Pomodoro</button>
+  </div>
+
+  <!-- Tab content -->
+  <div id="tab-content">
+
+    <!-- ── APPEARANCE ── -->
+    <div class="tab-pane active" data-pane="appearance">
+
+      <div class="setting-group">
+        <label class="setting-label">Accent Colour</label>
+        <div class="setting-row">
+          <input type="color" id="accent-color" value="#60c8ff" class="color-input">
+          <span class="setting-hint" id="accent-hex">#60c8ff</span>
+        </div>
+        <p class="setting-desc">Controls the glow, active workspace, clock, and icon highlights.</p>
+      </div>
+
+      <div class="setting-group">
+        <label class="setting-label">Bar Opacity <span class="val-badge" id="opacity-val">92%</span></label>
+        <input type="range" id="bar-opacity" min="40" max="100" value="92" class="range-input">
+        <p class="setting-desc">Overall transparency of the bar background.</p>
+      </div>
+
+      <div class="setting-group">
+        <label class="setting-label">Bar Height <span class="val-badge" id="height-val">44px</span></label>
+        <input type="range" id="bar-height" min="32" max="60" value="44" class="range-input">
+        <p class="setting-desc">Requires a restart to take effect.</p>
+      </div>
+
+    </div><!-- /appearance -->
+
+    <!-- ── WIDGETS ── -->
+    <div class="tab-pane" data-pane="widgets">
+      <p class="pane-desc">Toggle individual widgets on or off. Takes effect immediately.</p>
+
+      <div class="toggle-list">
+        <div class="toggle-row">
+          <div class="toggle-info">
+            <svg class="icon icon-dim"><use href="#ic-layers"/></svg>
+            <span>Workspaces</span>
+          </div>
+          <label class="toggle-switch">
+            <input type="checkbox" id="w-workspaces" checked>
+            <span class="toggle-thumb"></span>
+          </label>
+        </div>
+        <div class="toggle-row">
+          <div class="toggle-info">
+            <svg class="icon icon-dim"><use href="#ic-music"/></svg>
+            <span>Media Player</span>
+          </div>
+          <label class="toggle-switch">
+            <input type="checkbox" id="w-media" checked>
+            <span class="toggle-thumb"></span>
+          </label>
+        </div>
+        <div class="toggle-row">
+          <div class="toggle-info">
+            <svg class="icon icon-dim"><use href="#ic-partly-cloudy"/></svg>
+            <span>Weather</span>
+          </div>
+          <label class="toggle-switch">
+            <input type="checkbox" id="w-weather" checked>
+            <span class="toggle-thumb"></span>
+          </label>
+        </div>
+        <div class="toggle-row">
+          <div class="toggle-info">
+            <svg class="icon icon-dim"><use href="#ic-timer"/></svg>
+            <span>Pomodoro</span>
+          </div>
+          <label class="toggle-switch">
+            <input type="checkbox" id="w-pomodoro" checked>
+            <span class="toggle-thumb"></span>
+          </label>
+        </div>
+        <div class="toggle-row">
+          <div class="toggle-info">
+            <svg class="icon icon-dim"><use href="#ic-wifi-full"/></svg>
+            <span>Network</span>
+          </div>
+          <label class="toggle-switch">
+            <input type="checkbox" id="w-network" checked>
+            <span class="toggle-thumb"></span>
+          </label>
+        </div>
+        <div class="toggle-row">
+          <div class="toggle-info">
+            <svg class="icon icon-dim"><use href="#ic-cpu"/></svg>
+            <span>System Stats</span>
+          </div>
+          <label class="toggle-switch">
+            <input type="checkbox" id="w-system" checked>
+            <span class="toggle-thumb"></span>
+          </label>
+        </div>
+        <div class="toggle-row">
+          <div class="toggle-info">
+            <svg class="icon icon-dim"><use href="#ic-uptime"/></svg>
+            <span>Uptime</span>
+          </div>
+          <label class="toggle-switch">
+            <input type="checkbox" id="w-uptime" checked>
+            <span class="toggle-thumb"></span>
+          </label>
+        </div>
+        <div class="toggle-row">
+          <div class="toggle-info">
+            <svg class="icon icon-dim"><use href="#ic-bat-100"/></svg>
+            <span>Battery</span>
+          </div>
+          <label class="toggle-switch">
+            <input type="checkbox" id="w-battery" checked>
+            <span class="toggle-thumb"></span>
+          </label>
+        </div>
+      </div>
+    </div><!-- /widgets -->
+
+    <!-- ── WEATHER ── -->
+    <div class="tab-pane" data-pane="weather">
+
+      <div class="setting-group">
+        <label class="setting-label">Location</label>
+        <input type="text" id="weather-location" placeholder="auto (detect by IP)"
+               class="text-input" value="">
+        <p class="setting-desc">
+          Enter a city name, postcode, or leave blank for auto-detection.<br>
+          Examples: <code>Lagos</code>, <code>London</code>, <code>New York</code>
+        </p>
+      </div>
+
+      <div class="setting-group">
+        <label class="setting-label">Temperature Unit</label>
+        <div class="radio-group">
+          <label class="radio-opt">
+            <input type="radio" name="unit" value="C" checked> Celsius (°C)
+          </label>
+          <label class="radio-opt">
+            <input type="radio" name="unit" value="F"> Fahrenheit (°F)
+          </label>
+        </div>
+      </div>
+
+    </div><!-- /weather -->
+
+    <!-- ── POMODORO ── -->
+    <div class="tab-pane" data-pane="pomodoro">
+
+      <div class="setting-group">
+        <label class="setting-label">Focus Duration <span class="val-badge" id="focus-val">25 min</span></label>
+        <input type="range" id="pomo-focus" min="5" max="90" step="5" value="25" class="range-input">
+        <p class="setting-desc">Length of each focus session. Takes effect on next reset.</p>
+      </div>
+
+      <div class="setting-group">
+        <label class="setting-label">Break Duration <span class="val-badge" id="break-val">5 min</span></label>
+        <input type="range" id="pomo-break" min="1" max="30" step="1" value="5" class="range-input">
+        <p class="setting-desc">Length of the short break between focus sessions.</p>
+      </div>
+
+    </div><!-- /pomodoro -->
+
+  </div><!-- /#tab-content -->
+
+  <!-- Action footer -->
+  <div id="panel-footer">
+    <button class="btn btn-ghost" id="open-config-btn">Open config.json</button>
+    <div class="footer-right">
+      <button class="btn btn-ghost" id="reload-btn">Reload Bar</button>
+      <button class="btn btn-accent" id="save-btn">Save Changes</button>
+    </div>
+  </div>
+
+  <div id="save-toast" class="toast hidden">Changes saved — some require a restart.</div>
+
+  <div id="panel-credit">Made by <strong>Naeto Ifeanyi</strong> · Liquid Glass Bar v1.0</div>
+
+</div><!-- /#panel -->
+
+<script src="settings.js"></script>
+</body>
+</html>

@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self'">
+  <title>Media</title>
+  <style>
+    :root {
+      --accent: #60c8ff;
+      --t1: rgba(255,255,255,.92);
+      --t2: rgba(255,255,255,.55);
+      --t3: rgba(255,255,255,.28);
+      --border: rgba(255,255,255,.10);
+    }
+    *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+    html, body {
+      width:300px; height:156px;
+      background:transparent; overflow:hidden;
+      font-family:'Segoe UI Variable Display','Segoe UI',system-ui,sans-serif;
+      -webkit-font-smoothing:antialiased;
+      user-select:none;
+    }
+    #panel {
+      width:300px; height:156px;
+      background:rgba(8,10,22,.97);
+      border:1px solid var(--border);
+      border-radius:16px; padding:14px;
+      display:flex; flex-direction:column; gap:10px;
+      box-shadow:0 16px 48px rgba(0,0,0,.75), inset 0 1px 0 rgba(255,255,255,.07);
+    }
+
+    /* Track info */
+    .track-row { display:flex; align-items:center; gap:11px; }
+    .art {
+      width:44px; height:44px; border-radius:7px; flex-shrink:0;
+      background:rgba(255,255,255,.06); border:1px solid var(--border);
+      display:flex; align-items:center; justify-content:center; overflow:hidden;
+    }
+    .art svg { width:20px; height:20px; color:var(--t3); }
+    .art img  { width:100%; height:100%; object-fit:cover; }
+
+    .track-info { flex:1; min-width:0; display:flex; flex-direction:column; gap:3px; }
+    .track-app    { font-size:9px; color:var(--t3); text-transform:uppercase; letter-spacing:.5px; font-weight:700; }
+    .track-title  { font-size:13px; font-weight:600; color:var(--t1); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .track-artist { font-size:10.5px; color:var(--t2); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+
+    /* Controls */
+    .controls {
+      display:flex; align-items:center; justify-content:center; gap:6px;
+    }
+    .ctrl-btn {
+      width:36px; height:36px; border-radius:50%;
+      background:rgba(255,255,255,.07); border:1px solid var(--border);
+      display:flex; align-items:center; justify-content:center;
+      cursor:pointer; color:var(--t1);
+    }
+    .ctrl-btn:hover  { background:rgba(255,255,255,.14); }
+    .ctrl-btn:active { transform:scale(.88); }
+    .ctrl-btn.play-btn {
+      width:44px; height:44px; background:var(--accent); border-color:transparent; color:#000;
+    }
+    .ctrl-btn.play-btn:hover { background:#7fd4ff; }
+    .ctrl-btn svg { width:16px; height:16px; }
+    .ctrl-btn.play-btn svg { width:18px; height:18px; }
+  </style>
+</head>
+<body>
+<div id="panel">
+  <div class="track-row">
+    <div class="art" id="art-wrap">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+        <path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>
+      </svg>
+    </div>
+    <div class="track-info">
+      <div class="track-app"    id="mp-app">No media</div>
+      <div class="track-title"  id="mp-title">Nothing Playing</div>
+      <div class="track-artist" id="mp-artist"></div>
+    </div>
+  </div>
+
+  <div class="controls">
+    <button class="ctrl-btn" id="btn-prev" title="Previous">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h2v12H6zm3.5 6 8.5 6V6z"/></svg>
+    </button>
+    <button class="ctrl-btn play-btn" id="btn-play">
+      <svg id="play-svg" viewBox="0 0 24 24" fill="currentColor">
+        <polygon points="5,3 19,12 5,21"/>
+      </svg>
+    </button>
+    <button class="ctrl-btn" id="btn-next" title="Next">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 18l8.5-6L6 6v12zm8.5-6 3.5 6V6l-3.5 6z"/></svg>
+    </button>
+  </div>
+</div>
+
+<script>
+'use strict';
+let playing = false;
+
+function setArt(thumb) {
+  const wrap = document.getElementById('art-wrap');
+  if (thumb) {
+    // Detect mime type from base64 header (JPEG starts with /9j, PNG with iVBOR)
+    const mime = thumb.startsWith('/9j') ? 'image/jpeg' : 'image/png';
+    wrap.innerHTML = '<img src="data:' + mime + ';base64,' + thumb + '" alt="art">';
+  } else {
+    wrap.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>';
+  }
+}
+
+function setPlayIcon(isPlaying) {
+  playing = isPlaying;
+  const svg = document.getElementById('play-svg');
+  svg.innerHTML = isPlaying
+    ? '<rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/>'
+    : '<polygon points="5,3 19,12 5,21"/>';
+}
+
+window.electronAPI.onMediaInfo(({ title, artist, isPlaying, app, thumb }) => {
+  document.getElementById('mp-title').textContent  = title  || 'Nothing Playing';
+  document.getElementById('mp-artist').textContent = artist || '';
+  document.getElementById('mp-app').textContent    = app    || 'Media';
+  setPlayIcon(isPlaying);
+  setArt(thumb || '');
+});
+
+document.getElementById('btn-play').addEventListener('click', () => {
+  window.electronAPI.mediaControl('play-pause');
+  setPlayIcon(!playing);
+});
+document.getElementById('btn-prev').addEventListener('click', () => window.electronAPI.mediaControl('prev'));
+document.getElementById('btn-next').addEventListener('click', () => window.electronAPI.mediaControl('next'));
+</script>
+</body>
+</html>
